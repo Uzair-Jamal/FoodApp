@@ -1,5 +1,6 @@
 package com.example.foodapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -63,6 +64,7 @@ class MealActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observeMealDetailsLiveData() {
         mealMvvm.observeMealDetailsLiveData().observe(this
         ) { value ->
@@ -75,6 +77,7 @@ class MealActivity : AppCompatActivity() {
 
             youtubeLink = meal.strYoutube
         }
+
     }
 
     private fun setInformationInViews() {

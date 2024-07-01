@@ -8,12 +8,13 @@
     import android.view.ViewGroup
     import androidx.fragment.app.viewModels
     import androidx.lifecycle.Observer
+    import androidx.recyclerview.widget.GridLayoutManager
     import androidx.recyclerview.widget.LinearLayoutManager
-    import androidx.recyclerview.widget.RecyclerView.Adapter
     import com.bumptech.glide.Glide
+    import com.example.foodapp.adapters.CategoriesAdapter
     import com.example.foodapp.adapters.MostPopularAdapter
     import com.example.foodapp.databinding.FragmentHomeBinding
-    import com.example.foodapp.pojo.CategoryMeals
+    import com.example.foodapp.pojo.MealsByCategory
     import com.example.foodapp.pojo.Meal
     import com.example.foodapp.viewmodel.HomeViewModel
 
@@ -24,17 +25,20 @@
         private val homeMvvm:HomeViewModel by viewModels<HomeViewModel>()
         private lateinit var randomMeal: Meal
         private lateinit var popularItemsAdapter: MostPopularAdapter
+        private lateinit var categoriesAdapter: CategoriesAdapter
 
         companion object{
             const val MEAL_ID = "com.example.foodapp.idMeal"
             const val MEAL_NAME = "com.example.foodapp.mealName"
             const val MEAL_IMAGE = "com.example.foodapp.mealImage"
+            const val CATEGORY_NAME = "com.example.foodapp.categoryName"
 
 
         }
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-        popularItemsAdapter = MostPopularAdapter()
+            popularItemsAdapter = MostPopularAdapter()
+            categoriesAdapter = CategoriesAdapter()
         }
 
         override fun onCreateView(
@@ -55,9 +59,38 @@
             homeMvvm.getRandomMeal()
             observeRandomMeal()
             onRandomMealClick()
+
             homeMvvm.getPopularItems()
             observePopularItemsLiveData()
             onPopularItemClick()
+
+            prepareCategoriesRecyclerView()
+            homeMvvm.getCategories()
+            observeCategoriesListLiveData()
+            onCategoryClick()
+
+        }
+
+        private fun onCategoryClick() {
+            categoriesAdapter.onItemClick = {category ->
+                val intent = Intent(activity,CategoryMealsActivity::class.java)
+                intent.putExtra(CATEGORY_NAME, category.strCategory)
+                startActivity(intent)
+            }
+        }
+
+        private fun prepareCategoriesRecyclerView() {
+            binding.rvCategories.apply {
+                layoutManager = GridLayoutManager(context,3,GridLayoutManager.VERTICAL,false)
+                adapter = categoriesAdapter
+            }
+        }
+
+        private fun observeCategoriesListLiveData() {
+            homeMvvm.observeCategoriesLiveData().observe(viewLifecycleOwner, Observer {
+                    categoriesAdapter.setCategories(it)
+
+            })
         }
 
         private fun onPopularItemClick() {
@@ -81,7 +114,7 @@
         private fun observePopularItemsLiveData() {
             homeMvvm.observePopularItemsLiveData().observe(viewLifecycleOwner) {
                 mealList ->
-                    popularItemsAdapter.setMeals(mealsList = mealList as ArrayList<CategoryMeals>)
+                    popularItemsAdapter.setMeals(mealsList = mealList as ArrayList<MealsByCategory>)
 
 
             }

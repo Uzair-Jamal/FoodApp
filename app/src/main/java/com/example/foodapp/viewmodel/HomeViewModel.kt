@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.foodapp.pojo.Category
 import com.example.foodapp.pojo.CategoryList
-import com.example.foodapp.pojo.CategoryMeals
+import com.example.foodapp.pojo.MealsByCategoryList
+import com.example.foodapp.pojo.MealsByCategory
 import com.example.foodapp.pojo.Meal
 import com.example.foodapp.pojo.MealList
 import com.example.foodapp.retrofit.RetrofitInstance
@@ -15,7 +17,8 @@ import retrofit2.Response
 
 class HomeViewModel(): ViewModel() {
     private var randomMealLiveData = MutableLiveData<Meal>()
-    private var popularItemsLiveData = MutableLiveData<List<CategoryMeals>>()
+    private var popularItemsLiveData = MutableLiveData<List<MealsByCategory>>()
+    private var categoriesLiveData = MutableLiveData<List<Category>>()
     fun getRandomMeal() {
         RetrofitInstance.api.getRandomMeal().enqueue(object : Callback<MealList> {
             override fun onResponse(call: Call<MealList>, response: Response<MealList>) {
@@ -35,15 +38,30 @@ class HomeViewModel(): ViewModel() {
     }
 
     fun getPopularItems(){
-        RetrofitInstance.api.getPopularItems("Seafood").enqueue(object:Callback<CategoryList>{
-            override fun onResponse(call: Call<CategoryList>, response: Response<CategoryList>) {
+        RetrofitInstance.api.getPopularItems("Seafood").enqueue(object:Callback<MealsByCategoryList>{
+            override fun onResponse(call: Call<MealsByCategoryList>, response: Response<MealsByCategoryList>) {
                 if(response.body()!=null){
                     popularItemsLiveData.value = response.body()!!.meals
                 }
             }
 
-            override fun onFailure(p0: Call<CategoryList>, t: Throwable) {
+            override fun onFailure(p0: Call<MealsByCategoryList>, t: Throwable) {
                 Log.d("HomeFragment",t.message.toString())
+            }
+
+        })
+    }
+
+    fun getCategories(){
+        RetrofitInstance.api.getCategories().enqueue(object: Callback<CategoryList>{
+            override fun onResponse(p0: Call<CategoryList>, response: Response<CategoryList>) {
+                response.body()?.let {categoryList ->
+                    categoriesLiveData.postValue(categoryList.categories)
+                    }
+                }
+
+            override fun onFailure(p0: Call<CategoryList>, t: Throwable) {
+                Log.d("HomeViewModel",t.message.toString())
             }
 
         })
@@ -53,7 +71,11 @@ class HomeViewModel(): ViewModel() {
         return randomMealLiveData
     }
 
-    fun observePopularItemsLiveData(): LiveData<List<CategoryMeals>>{
+    fun observePopularItemsLiveData(): LiveData<List<MealsByCategory>>{
         return popularItemsLiveData
+    }
+
+    fun observeCategoriesLiveData(): LiveData<List<Category>>{
+        return categoriesLiveData
     }
 }
