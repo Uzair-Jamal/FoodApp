@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.foodapp.adapters.CategoryMealsAdapter
 import com.example.foodapp.databinding.ActivityCategoryMealsBinding
 import com.example.foodapp.databinding.ActivityMealBinding
 import com.example.foodapp.viewmodel.CategoryMealsViewModel
@@ -15,26 +17,29 @@ import com.example.foodapp.viewmodel.CategoryMealsViewModel
 class CategoryMealsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCategoryMealsBinding
     private val categoryMealsViewModel: CategoryMealsViewModel by viewModels<CategoryMealsViewModel>()
+    private lateinit var categoryMealsAdapter: CategoryMealsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCategoryMealsBinding.inflate(layoutInflater)
-
-        enableEdgeToEdge()
+        categoryMealsAdapter = CategoryMealsAdapter()
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
+        prepareRecyclerView()
         categoryMealsViewModel.getMealsByCategory(intent.getStringExtra(HomeFragment.CATEGORY_NAME)!!)
 
         categoryMealsViewModel.observeCategoryMealsLiveData().observe(this, Observer {
-            mealsList ->
-                mealsList.forEach {
-                    Log.d("test",it.strMeal)
-                }
+                mealsList ->
+                binding.tvCategoryCount.text = mealsList.size.toString()
+                categoryMealsAdapter.setMealsList(mealsList.toString())
         })
+
+    }
+
+    private fun prepareRecyclerView() {
+        binding.rvMeals.apply {
+            layoutManager = GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false)
+            adapter = categoryMealsAdapter
+        }
 
     }
 }
