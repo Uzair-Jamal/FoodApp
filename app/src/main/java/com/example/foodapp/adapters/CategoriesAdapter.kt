@@ -1,6 +1,7 @@
 package com.example.foodapp.adapters
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -13,17 +14,18 @@ class CategoriesAdapter():RecyclerView.Adapter<CategoriesAdapter.CategoriesViewH
     private var categoriesList = ArrayList<Category>()
     var onItemClick : ((Category) -> Unit)? = null
 
-    @SuppressLint("NotifyDataSetChanged")
     fun setCategories(categoriesList: List<Category>){
         this.categoriesList = categoriesList as ArrayList<Category>
         notifyDataSetChanged()
     }
-   inner class CategoriesViewHolder(val binding: CategoryItemBinding): RecyclerView.ViewHolder(binding.root) {
+   inner class CategoriesViewHolder(val binding: CategoryItemBinding):
+        RecyclerView.ViewHolder(binding.root) {
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoriesViewHolder {
-        return CategoriesViewHolder(CategoryItemBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+        return CategoriesViewHolder(CategoryItemBinding.inflate(
+            LayoutInflater.from(parent.context),parent,false))
     }
 
     override fun getItemCount(): Int {
@@ -38,6 +40,7 @@ class CategoriesAdapter():RecyclerView.Adapter<CategoriesAdapter.CategoriesViewH
         holder.binding.tvCategoryName.text = categoriesList[position].strCategory
 
         holder.itemView.setOnClickListener{
+            Log.d("CategoriesAdapter", "Item clicked: ${categoriesList[position].strCategory}")
             onItemClick!!.invoke(categoriesList[position])
         }
     }
