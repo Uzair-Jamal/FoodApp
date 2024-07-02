@@ -1,5 +1,6 @@
 package com.example.foodapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -15,6 +16,7 @@ class CategoryMealsActivity : AppCompatActivity() {
     private val categoryMealsViewModel: CategoryMealsViewModel by viewModels()
     private lateinit var categoryMealsAdapter: CategoryMealsAdapter
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCategoryMealsBinding.inflate(layoutInflater)
@@ -25,6 +27,7 @@ class CategoryMealsActivity : AppCompatActivity() {
 
         categoryMealsViewModel.observeMealsLiveData().observe(this,Observer{
             mealsList ->
+                binding.tvCategoryCount.text = "${mealsList.size.toString()}: Recipes"
                 categoryMealsAdapter.setMealsList(mealsList)
         })
 
