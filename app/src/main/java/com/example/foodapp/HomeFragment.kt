@@ -21,8 +21,8 @@ import com.example.foodapp.viewmodel.HomeViewModel
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
-    private val homeMvvm: HomeViewModel by viewModels()
     private lateinit var randomMeal: Meal
+    private lateinit var homeViewModel: HomeViewModel
     private lateinit var popularItemsAdapter: MostPopularAdapter
     private lateinit var categoriesAdapter: CategoriesAdapter
 
@@ -35,6 +35,8 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        homeViewModel = (activity as MainActivity).viewModel
         popularItemsAdapter = MostPopularAdapter()
         categoriesAdapter = CategoriesAdapter()
     }
@@ -50,18 +52,21 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
+
         preparePopularRecyclerView()
 
-        homeMvvm.getRandomMeal()
+        homeViewModel.getRandomMeal()
         observeRandomMeal()
         onRandomMealClick()
 
-        homeMvvm.getPopularItems()
+        homeViewModel.getPopularItems()
         observePopularItemsLiveData()
         onPopularItemClick()
 
         prepareCategoriesRecyclerView()
-        homeMvvm.getCategories()
+        homeViewModel.getCategories()
         observeCategoriesListLiveData()
         onCategoryClick()
     }
@@ -82,7 +87,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeCategoriesListLiveData() {
-        homeMvvm.observeCategoriesLiveData().observe(viewLifecycleOwner, Observer {
+        homeViewModel.observeCategoriesLiveData().observe(viewLifecycleOwner, Observer {
             categoriesAdapter.setCategories(it)
         })
     }
@@ -105,7 +110,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun observePopularItemsLiveData() {
-        homeMvvm.observePopularItemsLiveData().observe(viewLifecycleOwner) { mealList ->
+        homeViewModel.observePopularItemsLiveData().observe(viewLifecycleOwner) { mealList ->
             popularItemsAdapter.setMeals(mealsList = mealList as ArrayList<MealsByCategory>)
         }
     }
@@ -121,7 +126,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeRandomMeal() {
-        homeMvvm.observeMealLiveData().observe(viewLifecycleOwner) { meal ->
+        homeViewModel.observeMealLiveData().observe(viewLifecycleOwner) { meal ->
             Glide.with(this@HomeFragment)
                 .load(meal.strMealThumb)
                 .into(binding.randomMealImg)
