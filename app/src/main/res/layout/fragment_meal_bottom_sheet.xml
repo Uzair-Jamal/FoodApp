@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".bottomsheetFragment.MealBottomSheetFragment"
+    android:id="@+id/bottomSheetDialog"
+    >
+
+    <ImageView
+        android:id="@+id/bottom_imgView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/_5sdp"
+        android:background="@color/accent"
+        android:scaleType="centerCrop" />
+    
+    <LinearLayout
+        android:id="@+id/bottom_linear1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/bottom_imgView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bottom_imgView"
+        android:layout_margin="@dimen/_5sdp"
+        android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_bottom_loc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pakistan"
+                android:textSize="@dimen/_14ssp"
+                android:textColor="@color/g_black"
+                android:drawableStart="@drawable/location"
+                android:drawableTint="@color/g_black"
+                android:layout_weight="1"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_bottom_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category"
+                android:textSize="@dimen/_14ssp"
+                android:textColor="@color/g_black"
+                android:drawableStart="@drawable/categories"
+                android:drawableTint="@color/g_black"
+                android:layout_weight="1"
+                />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_linear2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/bottom_linear1"
+        app:layout_constraintStart_toStartOf="@+id/bottom_linear1"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/_5sdp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/category_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Category Name"
+            android:textSize="@dimen/_16ssp"
+            android:textColor="@color/g_black"
+            />
+
+        <TextView
+            android:id="@+id/read_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Read more ..."
+            android:textSize="@dimen/_16ssp"
+            android:textColor="@color/g_black"
+            android:layout_marginTop="@dimen/_5sdp"
+            />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
