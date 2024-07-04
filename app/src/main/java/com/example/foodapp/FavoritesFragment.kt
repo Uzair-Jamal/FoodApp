@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.foodapp.adapters.FavoritesMealsAdapter
 import com.example.foodapp.databinding.FragmentFavoritesBinding
 import com.example.foodapp.viewmodel.HomeViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class FavoritesFragment : Fragment() {
     private lateinit var binding: FragmentFavoritesBinding
@@ -38,21 +39,37 @@ class FavoritesFragment : Fragment() {
 
         prepareFavoriteMealsAdapter()
         observeFavorites()
-    }
 
-    val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(
-        ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-        ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
-    ){
-        override fun onMove(
-            recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder,
-            target: RecyclerView.ViewHolder
-        ): Boolean = true
+        val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean = true
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            val position = viewHolder.adapterPosition
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val currentList = favoritesMealsAdapter.differ.currentList
+
+                if (position >= 0 && position < currentList.size) {
+                    val meal = currentList[position]
+                    viewModel.deleteMeal(meal)
+                    Snackbar.make(requireView(), "Meal deleted", Snackbar.LENGTH_LONG).setAction(
+                        "Undo",
+                        View.OnClickListener {
+                            viewModel.insertMeal(meal)
+                        }
+                    ).show()
+                } else{
+                    Log.e("FavoritesFragment","Invalid position: $position, List size: ${currentList.size}")
+                }
+            }
         }
+
+        ItemTouchHelper(itemTouchHelper).attachToRecyclerView(binding.rvFavorites)
 
     }
 
