@@ -3,15 +3,13 @@ package com.example.foodapp.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.AsyncListUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.foodapp.databinding.FragmentFavoritesBinding
 import com.example.foodapp.databinding.MealItemBinding
 import com.example.foodapp.pojo.Meal
 
-class FavoritesMealsAdapter(): RecyclerView.Adapter<FavoritesMealsAdapter.FavoritesMealsAdapterViewHolder>() {
+class MealsAdapter(): RecyclerView.Adapter<MealsAdapter.FavoritesMealsAdapterViewHolder>() {
     inner class FavoritesMealsAdapterViewHolder(var binding: MealItemBinding): RecyclerView.ViewHolder(binding.root)
 
     private val diffUtil = object: DiffUtil.ItemCallback<Meal>(){

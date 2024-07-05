@@ -30,7 +30,7 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolBar"
                     android:layout_width="match_parent"
-                    android:layout_height="?actionBarSize"
+                    android:layout_height="80dp"
                     app:layout_collapseMode="pin"
                     />
 
@@ -44,7 +44,7 @@
         android:contentDescription="null"
         android:src="@drawable/favorites"
         android:backgroundTint="@color/accent"
-        android:tint="@color/white"
+        app:tint="@color/white"
         app:layout_anchor="@+id/appBar"
         app:layout_anchorGravity="bottom|end"
         android:layout_marginEnd="@dimen/_10sdp" />
@@ -128,7 +128,7 @@
         android:layout_height="wrap_content"
         app:layout_anchor="@+id/appBar"
         app:layout_anchorGravity="bottom"
-        android:visibility="gone"
+        android:visibility="visible"
         />
 
     <ImageView

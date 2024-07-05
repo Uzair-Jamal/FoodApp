@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -55,7 +56,6 @@ class HomeFragment : Fragment() {
 
         preparePopularRecyclerView()
 
-        homeViewModel.getRandomMeal()
         observeRandomMeal()
         onRandomMealClick()
 
@@ -70,6 +70,14 @@ class HomeFragment : Fragment() {
 
         onPopularItemLongClick()
 
+        onSearchClick()
+
+    }
+
+    private fun onSearchClick() {
+        binding.imgSearch.setOnClickListener{
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+        }
     }
 
     private fun onPopularItemLongClick() {

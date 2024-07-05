@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.foodapp.adapters.FavoritesMealsAdapter
+import com.example.foodapp.adapters.MealsAdapter
 import com.example.foodapp.databinding.FragmentFavoritesBinding
 import com.example.foodapp.viewmodel.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -18,7 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 class FavoritesFragment : Fragment() {
     private lateinit var binding: FragmentFavoritesBinding
     private lateinit var viewModel: HomeViewModel
-    private lateinit var favoritesMealsAdapter: FavoritesMealsAdapter
+    private lateinit var mealsAdapter: MealsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = (activity as MainActivity).viewModel
@@ -52,7 +52,7 @@ class FavoritesFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                val currentList = favoritesMealsAdapter.differ.currentList
+                val currentList = mealsAdapter.differ.currentList
 
                 if (position >= 0 && position < currentList.size) {
                     val meal = currentList[position]
@@ -74,17 +74,17 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun prepareFavoriteMealsAdapter() {
-        favoritesMealsAdapter = FavoritesMealsAdapter()
+        mealsAdapter = MealsAdapter()
         binding.rvFavorites.apply {
             layoutManager = GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false)
-            adapter = favoritesMealsAdapter
+            adapter = mealsAdapter
         }
     }
 
     private fun observeFavorites() {
         viewModel.observeFavoriteMealsLiveData().observe(requireActivity(), Observer{
                 meals ->
-                    favoritesMealsAdapter.differ.submitList(meals)
+                    mealsAdapter.differ.submitList(meals)
         })
     }
 }
